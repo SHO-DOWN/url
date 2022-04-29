@@ -24,7 +24,7 @@
             <form action="{% url 'generate' %}" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <input type="url" name="original" class="form-control" placeholder="Original Url">
+                    <input type="text" name="original" class="form-control" placeholder="Original Url">
                 </div>
                 <div class="form-group">
                     <div class="input-group-prepend">
@@ -72,7 +72,7 @@
 
 <!-- == Little Better View With Delete  -->
 
-<div class="container my-4">
+<!-- <div class="container my-4">
     <div class="row">
         <div class="col-12 text-center">
             <h4>Your Url's</h4>
@@ -111,7 +111,7 @@
         {% endfor %}
 
     </div>
-</div>
+</div> -->
 
 
 

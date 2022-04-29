@@ -4,7 +4,9 @@ from django.contrib import messages
 from .models import shorturl
 import random
 import string
-
+from app_ml import XGBoost_Classifier as xg
+from app_ml import url_extraction_input as uei
+import re
 # Create your views here.
 
 
@@ -24,23 +26,28 @@ def generate(request):
     if request.method == "POST":
         # generate
         pass
-        if request.POST['original'] and request.POST['short']:
+        if request.POST['original'] :
             # generate based on user input
             usr = request.user
             original = request.POST['original']
-            short = request.POST['short']
-            check = shorturl.objects.filter(short_query=short)
-            if not check:
-                newurl = shorturl(
-                    user=usr,
-                    original_url=original,
-                    short_query=short,
-                )
-                newurl.save()
-                return redirect(dashboard)
-            else:
-                messages.error(request, "Already Exists")
-                return redirect(dashboard)
+            # short = request.POST['short']
+            print(original,"ss")
+            initial_output=uei.featureExtraction(original)
+            output=xg.input_data(initial_output)
+            print(output,"sjgayusg")
+            # check = shorturl.objects.filter(short_query=short)
+            # if not check:
+            #     newurl = shorturl(
+            #         user=usr,
+            #         original_url=original,
+            #         short_query=short,
+            #     )
+            #     newurl.save()
+
+            #     return redirect(dashboard)
+            # else:
+            #     messages.error(request, "Already Exists")
+            #     return redirect(dashboard)
         elif request.POST['original']:
             # generate randomly
             usr = request.user
