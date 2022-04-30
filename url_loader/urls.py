@@ -20,7 +20,7 @@ from urlhandler.views import dashboard, generate, home, deleteurl
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', home),
+    path('', home),
     path('login/', login, name="login"),
     path('signup/', signup, name="signup"),
     path('logout/', logout, name="logout"),
