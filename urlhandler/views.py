@@ -4,8 +4,9 @@ from django.contrib import messages
 from .models import shorturl
 import random
 import string
-from app_ml import XGBoost_Classifier as xg
-from app_ml import url_extraction_input as uei
+from app_ml import GB_Classifier as gb
+from app_ml.feature import generate_data_set
+import numpy as np
 import re
 # Create your views here.
 
@@ -24,48 +25,38 @@ def randomgen():
 @login_required(login_url='/login/')
 def generate(request):
     if request.method == "POST":
-        # generate
         pass
         if request.POST['original'] :
             # generate based on user input
             usr = request.user
             original = request.POST['original']
-            # short = request.POST['short']
             print(original,"ss")
-            initial_output=uei.featureExtraction(original)
-            output=xg.input_data(initial_output)
-            print(output,"sjgayusg")
+            x=np.array(generate_data_set(original)).reshape(1,30)
+            output=gb.input_data(x)
+            print(output)
+            final_output = False
+            if(output==1):
+                final_output = True
+            newurl = shorturl(
+                user=usr,
+                    original_url=original,
+                    is_legitimate = final_output
+                )
+            newurl.save()
+            return redirect(dashboard)
             # check = shorturl.objects.filter(short_query=short)
             # if not check:
-            #     newurl = shorturl(
-            #         user=usr,
-            #         original_url=original,
-            #         short_query=short,
-            #     )
-            #     newurl.save()
-
-            #     return redirect(dashboard)
+                # newurl = shorturl(
+                #     user=usr,
+                #     original_url=original,
+                #     short_query=short,
+                #     is_legitimate = final_output
+                # )
+                # newurl.save()
+                # return redirect(dashboard)
             # else:
             #     messages.error(request, "Already Exists")
             #     return redirect(dashboard)
-        elif request.POST['original']:
-            # generate randomly
-            usr = request.user
-            original = request.POST['original']
-            generated = False
-            while not generated:
-                short = randomgen()
-                check = shorturl.objects.filter(short_query=short)
-                if not check:
-                    newurl = shorturl(
-                        user=usr,
-                        original_url=original,
-                        short_query=short,
-                    )
-                    newurl.save()
-                    return redirect(dashboard)
-                else:
-                    continue
         else:
             messages.error(request, "Empty Fields")
             return redirect(dashboard)
