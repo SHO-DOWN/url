@@ -31,8 +31,14 @@ def generate(request):
             usr = request.user
             original = request.POST['original']
             print(original,"ss")
-            x=np.array(generate_data_set(original)).reshape(1,30)
-            output=gb.input_data(x)
+            x=np.array(generate_data_set(original))
+            if len(x)!=30:
+                for i in range(30-len(x)):
+                    x_new=np.append(x,[-1])
+                x_new1=x_new.reshape(1,30)
+            else:
+                x_new1=x.reshape(1,30)
+            output=gb.input_data(x_new1)
             print(output)
             final_output = False
             if(output==1):
@@ -85,7 +91,7 @@ def deleteurl(request):
     if request.method == "POST":
         short = request.POST['delete']
         try:
-            check = shorturl.objects.filter(short_query=short)
+            check = shorturl.objects.filter(original_url=short)
             check.delete()
             return redirect(dashboard)
         except shorturl.DoesNotExist:

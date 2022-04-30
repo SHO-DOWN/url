@@ -59,7 +59,7 @@
                     <div class="col-4 text-right">
                         <form action="{% url 'deleteurl' %}" method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="delete" value="{{ u.short_query }}">
+                            <input type="hidden" name="delete" value="{{ u.original_url }}">
                             <input type="submit" class="btn btn-danger" value="Delete">
                         </form>
                     </div>
