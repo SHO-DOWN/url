@@ -8,7 +8,7 @@
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <title>Serwish | Login</title>
+    <title>CatchPhish | Login</title>
     <style>
         body {
             font-family: 'Baloo Thambi 2', cursive;
@@ -40,7 +40,7 @@
             {% if messages %}
             {% for msg in messages %}
             <div class="row justify-content-center">
-                <div class="alert alert-{{msg.tags}} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{% if msg.tags == 'error'%}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
                     {{ msg }}
 
                     <button type="button" class="close" data-dismiss="alert" area-label="Close">
@@ -61,7 +61,7 @@
                         <input type="password" class="form-control form-width" name="password" placeholder="Password"
                             id="">
                     </div>
-                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    <input type="hidden" name="next" value="{% if not request.GET.next %}/{% else %}{{request.GET.next}}{% endif %}">
                     <div class="form-group">
                         <input type="submit" class="btn btn-outline-success-1 px-4" value="Login">
                     </div>

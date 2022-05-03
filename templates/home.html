@@ -1,24 +1,128 @@
 {% extends 'nav.html' %}
-
+{% load static %}
 {% block content %}
-
-<h1 class="text-center">Home</h1>
-
-
 {% if error %}
-
-<div class="container shadow p-4">
+<div class="container">
     <div class="row">
         <div class="col-12 text-center">
-            <p>The Url you are looking for doesn't exist</p>
-            <a href="/dashboard" class="btn btn-primary">Shorten A Url</a>
+            <img src="https://lh3.googleusercontent.com/pw/AM-JKLXNQyh-F9RlNd4tNOg8b6ArSLKMstLuj6MrgZds834v43YeucwrmLg_WGmF75U_NqgUIY9rF2aC7WOyXI32EaTAPHT_-hDr5SnoFH11TLDHExe8kn6BM4ZHktTMldDOsn0WEdrrueBukiTgDasoAKto=w866-h575-no?authuser=0"
+                class="no-page" alt="">
+            <p>Sorry!<br />The url you are looking for doesn't exist!</p>
+            <a href="/" class="btn btn-outline-success-1 py-1">Go to home</a>
         </div>
     </div>
 </div>
+{% else %}
+<h1 class="text-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-left">
+                <div style="font-size: 40px;">
+                    <span style="color: #7F39FB;">Catch</span><span style="color: #BB86FC;">Phish</span>
+                </div>
+                <div style="font-size: 20px; word-spacing: 3px;">
+                    Avoid being the 'fish' for the Phishers!
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src="https://lh3.googleusercontent.com/pw/AM-JKLU32OF1RGwc6fMVaaepkrLdA1wMwNr3puWq_5WHlYS_7fMrrlTrYTC3_yoxTyAB4e1_WqoCUWRazXTifIJ2pj6msRvm5Zd3ZmmqdIw0QaA8X1hvnEI6Y7pozr6BPnswc4mfp8TPNGCyaPW0zxvAGAa8=s636-no?authuser=0"
+                    style="width: 90%;" alt="">
+            </div>
+        </div>
+        <div class="mt-5 row align-items-center">
+            <div class="col-md-6">
+                <img src="https://lh3.googleusercontent.com/pw/AM-JKLXXyvvs2RpaSMv7_hmrodMsGaCQAMpyW9sOJvFjxN-d1p7v2zVPKzEnNR769gCx3gJGdD_80GbnM8kAG5k5y4oM82dbnEFs4tD_TggkMORtUux61NdLmcA08LXL5CvT0Czej1f6h5wWDP1-p4ypO-Lj=s636-no?authuser=0"
+                    style="width: 90%;" alt="">
+            </div>
+            <div class="col-md-6 text-left">
+                <div style="font-size: 30px;">
+                    What is Phishing?
+                </div>
+                <div class="mt-2" style="font-size: 20px;font-weight: 400; word-spacing: 3px;">
+                    Phishing is a form of fraud in which the attacker tries to learn sensitive information such as login
+                    credentials or account information by sending as a reputable entity or person in email or other
+                    communication channels.<br />
+                    Typically a victim receives a message that appears to have been sent by a known contact or
+                    organization. The message contains malicious software targeting the user’s computer or has links to
+                    direct victims to malicious websites in order to trick them into divulging personal and financial
+                    information, such as passwords, account IDs or credit card details.
+                </div>
+            </div>
+        </div>
+        <div class="mt-5 row align-items-center">
+            <div class="col-md-6 text-left">
+                <div style="font-size: 30px;">
+                    Why users fall into this?
+                </div>
+                <div class="mt-2" style="font-size: 20px;font-weight: 400; word-spacing: 3px;">
+                    The main reason is the lack of awareness of users.Many users unwittingly click phishing domains
+                    every day and every hour. The attackers are targeting both the users and the companies. According to
+                    the 3rd Microsoft Computing Safer Index Report, released in February 2014, the annual worldwide
+                    impact of phishing could be very high as $5 billion.<br />
+                    But security defenders must take precautions to prevent users from confronting these harmful sites.
+                    Preventing these huge costs can start with making people conscious in addition to building strong
+                    security mechanisms which are able to detect and prevent phishing domains from reaching the user.
 
+                </div>
+            </div>
+            <div class="col-md-6">
+                <img src="https://lh3.googleusercontent.com/pw/AM-JKLX0hSuY0yYjcOXFCXt6EWXVnI1ybaitp3VEeM1oIxYkv0NmOCQ381N-3VS9vFojRvfvpN1SNDc4FJicgTkCQq0EgHWjAq91OcECNA3VERunemXwylqOM-wiTycuwZ-fN8Pc4I30pkNBL3YZwsLOa6Fg=s636-no?authuser=0"
+                    style="width: 90%;" alt="">
+            </div>
+        </div>
+        <div class="mt-5 row align-items-center">
+            <div class="col-md-6">
+                <img src="https://lh3.googleusercontent.com/pw/AM-JKLUiRO5pLFxq9Pk9kppk6mMGjRFrO1mV86cgEEVyHaymEkdGGjQ0tDzWpZjz5-Syl4cLt820_Bftq32JZp3dKyGwBwqYJhd55B7Ik-7MaBCKQHoVwtfUBe_sQaKgUnXkkkjYlFfmMJHarQD1sXTvGbcd=s636-no?authuser=0"
+                    style="width: 90%;" alt="">
+            </div>
+            <div class="col-md-6 text-left">
+                <div style="font-size: 30px;">
+                    What we do?
+                </div>
+                <div class="mt-2" style="font-size: 20px;font-weight: 400; word-spacing: 3px;">
+                    <ul>
+                        <li>
+                            We provide a <b>URL Detector Tool</b> with which you can find whether a website is
+                            legitimate or not.
+                        </li>
+                        <li>
+                            We keep track of each and every URL against which you use the URL detector.
+                        </li>
+                        <li>
+                            You can have a look to your previous detected URL's.
+                        </li>
+                        <li>
+                            We help you to not fall for traps that can cause you much harm!
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</h1>
 {% endif %}
+<style>
+    .btn-outline-success-1 {
+        color: #BB86FC;
+        border-color: #BB86FC;
+    }
 
-</body>
+    .btn-outline-success-1:hover {
+        background-color: #BB86FC;
+        border-color: #BB86FC;
+        color: white;
+    }
+
+    .no-page {
+        height: 400px;
+    }
+
+    @media screen and (max-width:800px) {
+        .no-page {
+            height: 200px;
+        }
+    }
+</style>
 
 </html>
 
