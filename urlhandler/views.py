@@ -1,3 +1,4 @@
+from email import message
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -16,6 +17,11 @@ def dashboard(request):
     usr = request.user
     urls = shorturl.objects.filter(user=usr)
     return render(request, 'dashboard.html', {'urls': urls})
+
+def history(request):
+    usr = request.user
+    urls = shorturl.objects.filter(user=usr)
+    return render(request, 'history.html', {'urls': urls})
 
 
 def randomgen():
@@ -38,7 +44,7 @@ def generate(request):
                 x_new1=x_new.reshape(1,30)
             else:
                 x_new1=x.reshape(1,30)
-            output=gb.input_data(x_new1)
+            output,percentage=gb.input_data(x_new1)
             print(output)
             final_output = False
             if(output==1):
@@ -49,6 +55,10 @@ def generate(request):
                     is_legitimate = final_output
                 )
             newurl.save()
+            if final_output==True:
+                messages.success(request,"Hurray! The URL is {0:.2f} % safe to go.".format(percentage*100))
+            else:
+                messages.error(request,"Beware! This is a phishing URL.")
             return redirect(dashboard)
             # check = shorturl.objects.filter(short_query=short)
             # if not check:
@@ -64,10 +74,10 @@ def generate(request):
             #     messages.error(request, "Already Exists")
             #     return redirect(dashboard)
         else:
-            messages.error(request, "Empty Fields")
+            messages.error(request, "You cannot proceed without URL")
             return redirect(dashboard)
     else:
-        return redirect('/dashboard')
+        return redirect('/url-checker')
 
 
 def home(request, query=None):
@@ -93,7 +103,7 @@ def deleteurl(request):
         try:
             check = shorturl.objects.filter(original_url=short)
             check.delete()
-            return redirect(dashboard)
+            return redirect(history)
         except shorturl.DoesNotExist:
             return redirect(home)
     else:
