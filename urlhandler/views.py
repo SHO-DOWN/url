@@ -93,6 +93,10 @@ def home(request, query=None):
         except shorturl.DoesNotExist:
             return render(request, 'home.html', {'error': "error"})
 
+
+def about(request):
+    return render(request,'about.html')
+
 # added delete URl
 
 
@@ -108,3 +112,4 @@ def deleteurl(request):
             return redirect(home)
     else:
         return redirect(home)
+
