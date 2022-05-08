@@ -20,11 +20,13 @@
                     <div>
                         {{ msg }}
                     </div>
-                    <div>
-                        <a href="/history">
-                            Check your history.
+                    {% if url %}
+                    <div class="open-link">
+                        <a target="_blank" style="color: #155724;" href="{{ url }}">
+                            Open Link <i class="fa-solid fa-up-right-from-square"></i>
                         </a>
                     </div>
+                    {% endif %}
                 </div>
                 {% endif %}
                 <button type="button" class="close" data-dismiss="alert" area-label="Close">
@@ -67,6 +69,9 @@
         background-color: #BB86FC;
         border-color: #BB86FC;
         color: white;
+    }
+    .open-link a:hover{
+        color: #155724;
     }
 </style>
 

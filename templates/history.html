@@ -26,7 +26,7 @@
                     <td>
                         <form action="{% url 'deleteurl' %}" method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="delete" value="{{ u.original_url }}">
+                            <input type="hidden" name="delete" value="{{ u.id }}">
                             <input type="submit" class="btn btn-danger px-3 py-0" value="Delete">
                         </form>
                     </td>

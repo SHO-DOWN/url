@@ -55,14 +55,27 @@ def generate(request):
                     is_legitimate = final_output
                 )
             newurl.save()
+            final_url=""
+            flag=0
+            print(original  )
+            if(original.find("https://")==-1):
+                if(original.find("http://")==-1):
+                    flag=1
+                else:
+                    flag=0
+            if(flag==1):
+                final_url = "https://"+original
+            else:
+                final_url = original
             if final_output==True:
-                messages.success(request,"Hurray! The URL is {0:.2f} % safe to go.".format(percentage*100))
+                messages.success(request,"The URL is {0:.2f} % safe to go.".format(percentage*100))
+                return render(request,'dashboard.html',{'url':final_url})
             else:
                 messages.error(request,"Beware! This is a phishing URL.")
-            return redirect(dashboard)
+            return render(request,'dashboard.html')
             # check = shorturl.objects.filter(short_query=short)
             # if not check:
-                # newurl = shorturl(
+                # newurl = shorturl(    
                 #     user=usr,
                 #     original_url=original,
                 #     short_query=short,
@@ -103,9 +116,9 @@ def about(request):
 @login_required(login_url='/login/')
 def deleteurl(request):
     if request.method == "POST":
-        short = request.POST['delete']
+        id = request.POST['delete']
         try:
-            check = shorturl.objects.filter(original_url=short)
+            check = shorturl.objects.filter(id=id)
             check.delete()
             return redirect(history)
         except shorturl.DoesNotExist:
