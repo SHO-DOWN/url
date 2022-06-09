@@ -1,0 +1,48 @@
+{% extends 'nav.html' %}
+
+{% block content %}
+
+<div class="container" style="height: 81.6vh;">
+    {% if urls %}
+    <div class="pb-2" style="font-size: larger;">URL's you checked for in past:</div>
+    <div class="" style="overflow: scroll;">
+        
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <!-- <th scope="col">Sl. No.</th> -->
+                    <th scope="col">URL</th>
+                    <th scope="col">Legitimate/Phishing</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for u in urls %}
+                <tr>
+                    <!-- <th scope="row">1</th> -->
+                    <td>{{ u.original_url }}</td>
+                    <td>{% if u.is_legitimate == True %}Legitimate{% else %}Phishing{% endif %}</td>
+                    <td>
+                        <form action="{% url 'deleteurl' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="delete" value="{{ u.id }}">
+                            <input type="submit" class="btn btn-danger px-3 py-0" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-6">
+                <img src="https://lh3.googleusercontent.com/pw/AM-JKLXEy_4EkCx3k1RI0md-V_ASW7razqNrGZvDEF2QIWIjPgATn8KBASRE1PQI8U8F23XzLZ50xr5uRGez9G6I8gmqgfUA7C97GCZdfsewFa2PX2sCe3LJdr-7dDK9yLWZRBvbhU1QFADv1eUVabNOB2Ox=s575-no?authuser=0"
+                    style="width:100%" alt="">
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

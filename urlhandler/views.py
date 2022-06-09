@@ -1,10 +1,14 @@
+from email import message
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import shorturl
 import random
 import string
-
+from app_ml import GB_Classifier as gb
+from app_ml.feature import generate_data_set
+import numpy as np
+import re
 # Create your views here.
 
 
@@ -14,6 +18,11 @@ def dashboard(request):
     urls = shorturl.objects.filter(user=usr)
     return render(request, 'dashboard.html', {'urls': urls})
 
+def history(request):
+    usr = request.user
+    urls = shorturl.objects.filter(user=usr)
+    return render(request, 'history.html', {'urls': urls})
+
 
 def randomgen():
     return ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
@@ -22,48 +31,66 @@ def randomgen():
 @login_required(login_url='/login/')
 def generate(request):
     if request.method == "POST":
-        # generate
         pass
-        if request.POST['original'] and request.POST['short']:
+        if request.POST['original'] :
             # generate based on user input
             usr = request.user
             original = request.POST['original']
-            short = request.POST['short']
-            check = shorturl.objects.filter(short_query=short)
-            if not check:
-                newurl = shorturl(
-                    user=usr,
-                    original_url=original,
-                    short_query=short,
-                )
-                newurl.save()
-                return redirect(dashboard)
+            print(original,"ss")
+            x=np.array(generate_data_set(original))
+            if len(x)!=30:
+                for i in range(30-len(x)):
+                    x_new=np.append(x,[-1])
+                x_new1=x_new.reshape(1,30)
             else:
-                messages.error(request, "Already Exists")
-                return redirect(dashboard)
-        elif request.POST['original']:
-            # generate randomly
-            usr = request.user
-            original = request.POST['original']
-            generated = False
-            while not generated:
-                short = randomgen()
-                check = shorturl.objects.filter(short_query=short)
-                if not check:
-                    newurl = shorturl(
-                        user=usr,
-                        original_url=original,
-                        short_query=short,
-                    )
-                    newurl.save()
-                    return redirect(dashboard)
+                x_new1=x.reshape(1,30)
+            output,percentage=gb.input_data(x_new1)
+            print(output)
+            final_output = False
+            if(output==1):
+                final_output = True
+            newurl = shorturl(
+                user=usr,
+                    original_url=original,
+                    is_legitimate = final_output
+                )
+            newurl.save()
+            final_url=""
+            flag=0
+            print(original  )
+            if(original.find("https://")==-1):
+                if(original.find("http://")==-1):
+                    flag=1
                 else:
-                    continue
+                    flag=0
+            if(flag==1):
+                final_url = "https://"+original
+            else:
+                final_url = original
+            if final_output==True:
+                messages.success(request,"The URL is {0:.2f} % safe to go.".format(percentage*100))
+                return render(request,'dashboard.html',{'url':final_url})
+            else:
+                messages.error(request,"Beware! This is a phishing URL.")
+            return render(request,'dashboard.html')
+            # check = shorturl.objects.filter(short_query=short)
+            # if not check:
+                # newurl = shorturl(    
+                #     user=usr,
+                #     original_url=original,
+                #     short_query=short,
+                #     is_legitimate = final_output
+                # )
+                # newurl.save()
+                # return redirect(dashboard)
+            # else:
+            #     messages.error(request, "Already Exists")
+            #     return redirect(dashboard)
         else:
-            messages.error(request, "Empty Fields")
+            messages.error(request, "You cannot proceed without URL")
             return redirect(dashboard)
     else:
-        return redirect('/dashboard')
+        return redirect('/url-checker')
 
 
 def home(request, query=None):
@@ -79,18 +106,23 @@ def home(request, query=None):
         except shorturl.DoesNotExist:
             return render(request, 'home.html', {'error': "error"})
 
+
+def about(request):
+    return render(request,'about.html')
+
 # added delete URl
 
 
 @login_required(login_url='/login/')
 def deleteurl(request):
     if request.method == "POST":
-        short = request.POST['delete']
+        id = request.POST['delete']
         try:
-            check = shorturl.objects.filter(short_query=short)
+            check = shorturl.objects.filter(id=id)
             check.delete()
-            return redirect(dashboard)
+            return redirect(history)
         except shorturl.DoesNotExist:
             return redirect(home)
     else:
         return redirect(home)
+
